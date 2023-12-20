@@ -1,90 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 
 const SelectSit = () => {
   const leftColum = [
     {
-      id: 1,
+      id: "L1",
       sit: "A 1",
+      disabled: false,
     },
     {
-      id: 2,
+      id: "L2",
       sit: "A 2",
+      disabled: false,
     },
-    {
-      id: 3,
-      sit: "C 1",
-    },
-    {
-      id: 4,
-      sit: "C 2",
-    },
-    {
-      id: 5,
-      sit: "E 1",
-    },
-    {
-      id: 6,
-      sit: "E 2",
-    },
-    {
-      id: 7,
-      sit: "G 1",
-    },
-    {
-      id: 8,
-      sit: "G 2",
-    },
-    {
-      id: 9,
-      sit: "I 1",
-    },
-    {
-      id: 10,
-      sit: "I 2",
-    },
+    // ... (other seats with disabled property)
   ];
+
   const rightColum = [
     {
-      id: 1,
+      id: "R1",
       sit: "B 1",
+      disabled: false,
     },
     {
-      id: 2,
+      id: "R2",
       sit: "B 2",
+      disabled: false,
     },
-    {
-      id: 3,
-      sit: "D 1",
-    },
-    {
-      id: 4,
-      sit: "D 2",
-    },
-    {
-      id: 5,
-      sit: "F 1",
-    },
-    {
-      id: 6,
-      sit: "F 2",
-    },
-    {
-      id: 7,
-      sit: "H 1",
-    },
-    {
-      id: 8,
-      sit: "H 2",
-    },
-    {
-      id: 9,
-      sit: "K 2",
-    },
-    {
-      id: 10,
-      sit: "K 2",
-    },
+    // ... (other seats with disabled property)
   ];
+
+  const [selectedSeats, setSelectedSeats] = useState([]);
+
+  const handleSeatClick = (seat) => {
+    if (seat.disabled) {
+      return;
+    }
+
+    const isSelected = selectedSeats.some((selectedSeat) => selectedSeat.id === seat.id);
+
+    if (isSelected) {
+      // Seat is already selected, remove it from the list and update disabled status
+      setSelectedSeats((prevSelectedSeats) =>
+        prevSelectedSeats.filter((selectedSeat) => selectedSeat.id !== seat.id)
+      );
+      seat.disabled = false; // Set the seat as not disabled
+    } else {
+      // Seat is not selected, add it to the list and update disabled status
+      setSelectedSeats([...selectedSeats, seat]);
+      seat.disabled = true; // Set the seat as disabled
+    }
+  };
+
   return (
     <div className="ml-5 mr-5 my-10">
       <div>
@@ -94,8 +60,16 @@ const SelectSit = () => {
               <div className="flex gap-10 ">
                 <div className="grid grid-cols-2 ">
                   {leftColum.map((left) => (
-                    <div left={left} key={left.id}>
-                      <div className="border-2 p-2 rounded-xl bg-purple-400">
+                    <div key={left.id} onClick={() => handleSeatClick(left)}>
+                      <div
+                        className={`border-2 p-2 rounded-xl ${
+                          left.disabled
+                            ? "bg-red-500 cursor-not-allowed"
+                            : selectedSeats.some((selectedSeat) => selectedSeat.id === left.id)
+                            ? "bg-gray-500 cursor-not-allowed"
+                            : "bg-purple-400 cursor-pointer"
+                        }`}
+                      >
                         {left.sit}
                       </div>
                     </div>
@@ -103,33 +77,34 @@ const SelectSit = () => {
                 </div>
                 <div className="grid grid-cols-2 ">
                   {rightColum.map((right) => (
-                    <div right={right} key={right.id}>
-                      <div className="border-2 p-2 rounded-xl bg-purple-400">
+                    <div key={right.id} onClick={() => handleSeatClick(right)}>
+                      <div
+                        className={`border-2 p-2 rounded-xl ${
+                          right.disabled
+                            ? "bg-red-500 cursor-not-allowed"
+                            : selectedSeats.some((selectedSeat) => selectedSeat.id === right.id)
+                            ? "bg-gray-500 cursor-not-allowed"
+                            : "bg-purple-400 cursor-pointer"
+                        }`}
+                      >
                         {right.sit}
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
-             
             </div>
             <div>
-            <div className="flex justify-center">
-                <div className="border-2 p-2 rounded-xl bg-purple-400 w-11">
-                  last
-                </div>
-                <div className="border-2 p-2 rounded-xl bg-purple-400 w-11">
-                  last
-                </div>
-                <div className="border-2 p-2 rounded-xl bg-purple-400 w-11">
-                  last
-                </div>
-                <div className="border-2 p-2 rounded-xl bg-purple-400 w-11">
-                  last
-                </div>
-                <div className="border-2 p-2 rounded-xl bg-purple-400 w-11">
-                  last
-                </div>
+              <div className="flex justify-center">
+                {/* Display the selected seat numbers */}
+                {selectedSeats.map((selectedSeat) => (
+                  <div
+                    key={selectedSeat.id}
+                    className="border-2 p-2 rounded-xl bg-blue-500 mr-2"
+                  >
+                    {`Selected: ${selectedSeat.sit}`}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
