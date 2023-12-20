@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
+import { AuthContext } from "../contexts/Authcontexts";
 
 const NavDrawer = () => {
+  const {user}=useContext(AuthContext)
   return (
     <div className="relative">
       <div className="drawer lg:drawer-open">
@@ -31,7 +33,7 @@ const NavDrawer = () => {
               <Link to='/bookings'>Booking ticket </Link>
             </li>
             <li>
-              <a>Sidebar Item 2</a>
+              user: {user?user.displayName:''}
             </li>
           </ul>
         </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const SelectSit = () => {
   const leftColum = [
@@ -30,6 +30,7 @@ const SelectSit = () => {
   ];
 
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [ticketPrice,setTicketPrice]=useState(0);
 
   const handleSeatClick = (seat) => {
     if (seat.disabled) {
@@ -51,6 +52,21 @@ const SelectSit = () => {
     }
   };
 
+  const NumberofTicket = selectedSeats.length;
+  useEffect(() => {
+    const baseTicketPrice = 10; // Set your base ticket price here
+    const totalPrice = baseTicketPrice * NumberofTicket;
+    setTicketPrice(totalPrice);
+  }, [NumberofTicket]);
+  
+  const handlePayment = () => {
+    console.log("Pay me ", NumberofTicket);
+    console.log("Total Price: ", ticketPrice);
+  };
+
+
+  console.log("sits selected : ",selectedSeats)
+
   return (
     <div className="ml-5 mr-5 my-10">
       <div>
@@ -61,14 +77,15 @@ const SelectSit = () => {
                 <div className="grid grid-cols-2 ">
                   {leftColum.map((left) => (
                     <div key={left.id} onClick={() => handleSeatClick(left)}>
-                      <div
-                        className={`border-2 p-2 rounded-xl ${
-                          left.disabled
-                            ? "bg-red-500 cursor-not-allowed"
-                            : selectedSeats.some((selectedSeat) => selectedSeat.id === left.id)
-                            ? "bg-gray-500 cursor-not-allowed"
-                            : "bg-purple-400 cursor-pointer"
+                      <div className={`border-2 p-2 rounded-xl ${
+                        left.disabled
+                        ?"bg-red-500 cursor-not-allowed"
+                        :selectedSeats.some((selectedSeat) => selectedSeat.id === left.id)
+                        ?"bg-green-300"
+                        : "bg-purple-400 cursor-pointer"
+                  
                         }`}
+                        
                       >
                         {left.sit}
                       </div>
@@ -83,7 +100,7 @@ const SelectSit = () => {
                           right.disabled
                             ? "bg-red-500 cursor-not-allowed"
                             : selectedSeats.some((selectedSeat) => selectedSeat.id === right.id)
-                            ? "bg-gray-500 cursor-not-allowed"
+                            ? "bg-green-500 cursor-not-allowed"
                             : "bg-purple-400 cursor-pointer"
                         }`}
                       >
@@ -107,9 +124,17 @@ const SelectSit = () => {
                 ))}
               </div>
             </div>
+
+
+
+           
           </div>
         </div>
+        
       </div>
+          <div onClick={handlePayment} className="flex justify-center btn btn-outline bg-purple-200 w-32 mx-auto mt-5">
+              <p>Pay now : {ticketPrice}</p>
+            </div>
     </div>
   );
 };
