@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const SelectSit = () => {
+
+  const location = useLocation();
+  const selectedTrain = location.state?.selectedTrain || null;
+
+  console.log('Location state:', location.state);
+  console.log('Selected Train:', selectedTrain.trainName);
   const leftColum = [
     {
       id: "L1",
@@ -12,7 +19,17 @@ const SelectSit = () => {
       sit: "A 2",
       disabled: false,
     },
-    // ... (other seats with disabled property)
+    {
+      id: "L3",
+      sit: "C 1",
+      disabled: false,
+    },
+    {
+      id: "L4",
+      sit: "C 2",
+      disabled: false,
+    },
+   
   ];
 
   const rightColum = [
@@ -24,6 +41,16 @@ const SelectSit = () => {
     {
       id: "R2",
       sit: "B 2",
+      disabled: false,
+    },
+    {
+      id: "R3",
+      sit: "D 1",
+      disabled: false,
+    },
+    {
+      id: "R4",
+      sit: "D 2",
       disabled: false,
     },
     // ... (other seats with disabled property)
@@ -69,6 +96,7 @@ const SelectSit = () => {
 
   return (
     <div className="ml-5 mr-5 my-10">
+    
       <div>
         <div className="">
           <div>
@@ -81,7 +109,7 @@ const SelectSit = () => {
                         left.disabled
                         ?"bg-red-500 cursor-not-allowed"
                         :selectedSeats.some((selectedSeat) => selectedSeat.id === left.id)
-                        ?"bg-green-300"
+                        ?"bg-green-300 cursor-not-allowed"
                         : "bg-purple-400 cursor-pointer"
                   
                         }`}

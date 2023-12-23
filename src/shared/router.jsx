@@ -4,6 +4,8 @@ import Bookings from "../bookings/Bookings";
 import Home from "../home/Home";
 import SelectSit from "../bookings/SelectSit";
 import LoginGoogle from "../authnticate/LoginGoogle";
+import PrivateRouter from "./PrivateRouter";
+import Shedule from "../bookings/Shedule";
 
 const router=createBrowserRouter([
       {
@@ -18,6 +20,7 @@ const router=createBrowserRouter([
                   {
                         path:'/bookings',
                         element:<Bookings></Bookings>
+                       
                   },
                   {
                         path:'/selectsit',
@@ -26,6 +29,10 @@ const router=createBrowserRouter([
                   {
                         path:'/signin',
                         element:<LoginGoogle></LoginGoogle>
+                  },
+                  {
+                        path:'/schedule',
+                        element:<Shedule></Shedule>
                   },
                   {
                         path:'*',

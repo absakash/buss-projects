@@ -1,22 +1,15 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import Select from "react-select";
 
-import toast from "react-hot-toast";
-import { Navigate, useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/Authcontexts";
-
 const Bookings = () => {
-  const { selectedDate,setSelectedDate } = useContext(AuthContext);
-  const navigate=useNavigate()
   const [fees, setFees] = useState(0);
   const {
     register,
     handleSubmit,
-    reset,
-    setValue,
+    setValue, // Add setValue
     formState: { errors },
   } = useForm();
 
@@ -24,10 +17,10 @@ const Bookings = () => {
 
   let footer = <p>Please pick a day.</p>;
   if (selected) {
-    footer = <p>todays date :  {selected.toLocaleDateString()}.</p>;
+    footer = <p>You picked {selected.toLocaleDateString()}.</p>;
   }
 
-  const onSubmitClick = async(data) => {
+  const onSubmitClick = (data) => {
     console.log("all data ", data);
     const feesMap = {
       Dhaka: 100,
@@ -72,33 +65,8 @@ const Bookings = () => {
       costs: totalFees,
       date: data.date,
     };
-    setSelectedDate(data.date)
-    localStorage.setItem("date", data.date)
-    localStorage.setItem("departureCity",startingLocation)
-    localStorage.setItem("arrivalCity", destinationLocation)
 
     console.log("total data ", userInfo);
-
-    try {
-      // Make a POST request to your server endpoint
-      const response = await fetch('http://localhost:4000/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userInfo),
-      });
-  
-      const result = await response.json();
-      console.log("mongobd users",result); 
-      if(result){
-        toast.success('go to select buss')
-        reset()
-        navigate('/schedule')
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
   };
 
   const options = [
@@ -178,22 +146,4 @@ const Bookings = () => {
               placeholder="Select or search for ending location"
               onChange={(selectedOption) => setValue("to", selectedOption)}
             />
-            <p className="text-red-600">{errors?.to?.message}</p>
-
-            {/* <div className="mx-auto flex justify-center">
-              <p className="text-2xl mt-5 bg-red-50 btn btn-outline">
-                Your ticket price = {fees ? fees : "no "}
-              </p>
-            </div> */}
-
-            <input className="btn btn-outline bg-purple-50 mt-3" type="submit" value="Submit" />
-          </form>
-        </div>
-      </div>
-
-      
-    </div>
-  );
-};
-
-export default Bookings;
+            <p className="text-red-600">{errors?.to?.message
