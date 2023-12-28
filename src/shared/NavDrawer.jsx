@@ -3,7 +3,7 @@ import { Link, Outlet } from "react-router-dom";
 import { AuthContext } from "../contexts/Authcontexts";
 
 const NavDrawer = () => {
-  const {user}=useContext(AuthContext)
+  const { user } = useContext(AuthContext);
   return (
     <div className="relative">
       <div className="drawer lg:drawer-open">
@@ -26,14 +26,17 @@ const NavDrawer = () => {
           ></label>
           <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
             {/* Sidebar content here */}
-            <li >
-              <Link to='/'>Home  </Link>
+            <li className="text-purple-500 hover:text-red-400 hover:scale-110">
+              <Link to="/">Home </Link>
             </li>
-            <li >
-              <Link to='/bookings'>Booking ticket </Link>
+            <li className="text-purple-500 hover:text-red-400 hover:scale-110">
+              <Link to="/bookings">Booking ticket </Link>
             </li>
-            <li>
-              user: {user?user.displayName:''}
+            <li className="text-purple-500 hover:text-red-400 hover:scale-110">
+              <Link to="/seeticket">Visit ticket </Link>
+            </li>
+            <li className="text-purple-500 hover:text-red-400 hover:scale-110">
+              <Link>user: {user ? user.displayName : ""}</Link>
             </li>
           </ul>
         </div>

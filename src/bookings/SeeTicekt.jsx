@@ -3,10 +3,12 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Loading from "../shared/Loading";
 
-const SelectSit = () => {
+const SeeTicket = () => {
   const userDate = localStorage.getItem("date");
   const departureCity = localStorage.getItem("departureCity");
   const arrivalCity = localStorage.getItem("arrivalCity");
+  const ticketholder = localStorage.getItem("ticketHolder");
+  const mobile = localStorage.getItem("mobile");
   const {
     data: finalData = [],
     refetch,
@@ -27,7 +29,6 @@ const SelectSit = () => {
   // console.log("Location state:", location.state);
   // console.log("Selected Train:", selectedTrain.trainName);
 
-
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [ticketPrice, setTicketPrice] = useState(0);
   const [baseTicketPrice, setBaseTicketPrice] = useState(0);
@@ -40,27 +41,6 @@ const SelectSit = () => {
       }
     }
   }, [finalData, userDate]);
-  // const handleSeatClick = (seat) => {
-  //   if (seat.disabled) {
-  //     return;
-  //   }
-
-  //   const isSelected = selectedSeats.some(
-  //     (selectedSeat) => selectedSeat.id === seat.id
-  //   );
-
-  //   if (isSelected) {
-  //     // Seat is already selected, remove it from the list and update disabled status
-  //     setSelectedSeats((prevSelectedSeats) =>
-  //       prevSelectedSeats.filter((selectedSeat) => selectedSeat.id !== seat.id)
-  //     );
-  //     seat.disabled = false; // Set the seat as not disabled
-  //   } else {
-  //     // Seat is not selected, add it to the list and update disabled status
-  //     setSelectedSeats([...selectedSeats, seat]);
-  //     seat.disabled = true; // Set the seat as disabled
-  //   }
-  // };
 
   const handleSeatClick = async (seat) => {
     if (seat.disabled) {
@@ -95,37 +75,41 @@ const SelectSit = () => {
   }, [NumberofTicket]);
 
   const handlePayment = () => {
- 
-    const payRelatedInfo={
-      numberOfSelectedTicket:NumberofTicket,
-      totalPrice:ticketPrice,
-      id:11234,
-      selected:selectedSeats
-    }
-    console.log("fecth korbo",payRelatedInfo)
+    const payRelatedInfo = {
+      numberOfSelectedTicket: NumberofTicket,
+      totalPrice: ticketPrice,
+      id: 11234,
+      selected: selectedSeats,
+    };
+    console.log("fecth korbo", payRelatedInfo);
 
-    fetch("http://localhost:4000/book",{
-      method:'POST',
-      headers:{
-        'content-type':'application/json'
+    fetch("http://localhost:4000/book", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
       },
-      body:JSON.stringify(payRelatedInfo)
-
-    }).then(res=>res.json())
-    .then(result=>{
-      window.location.replace(result.url)
-      console.log(result);
+      body: JSON.stringify(payRelatedInfo),
     })
+      .then((res) => res.json())
+      .then((result) => {
+        window.location.replace(result.url);
+        console.log(result);
+      });
   };
 
   console.log("sits selected : ", selectedSeats);
 
   console.log("base price : ", baseTicketPrice);
   console.log("numer : ", selectedSeats.length);
-  if(isLoading){
-    return <Loading></Loading>
+  if (isLoading) {
+    return <Loading></Loading>;
   }
 
+  const handleDownload = () => {
+      window.print();
+    };
+    
+    
   return (
     <div>
       <div>
@@ -148,17 +132,18 @@ const SelectSit = () => {
                         {train.trainName} {train.ticketCost}
                       </p>
 
-                      <h1 className="text-center py-5">
+                      <h1 className="text-center mt-5">
                         Selected Date: {userDate}
                       </h1>
+                      <h1 className="text-center ">
+                        ticket holeder name : {ticketholder}
+                      </h1>
+                      <h1 className="text-center ">phone number : {mobile}</h1>
                       <div className="flex justify-center">
                         <div className="flex gap-10 ">
                           <div className="grid grid-cols-2">
                             {train.seats.leftColum.map((left) => (
-                              <div
-                                key={left.id}
-                                onClick={() => handleSeatClick(left)}
-                              >
+                              <div key={left.id}>
                                 <div
                                   className={`border-2 p-2 rounded-xl ${
                                     left.disabled
@@ -181,7 +166,6 @@ const SelectSit = () => {
                             {train.seats.rightColum.map((right) => (
                               <div key={right.id}>
                                 <div
-                                  onClick={() => handleSeatClick(right)}
                                   className={`border-2 p-2 rounded-xl ${
                                     right.disabled
                                       ? "bg-red-500 cursor-not-allowed"
@@ -201,43 +185,14 @@ const SelectSit = () => {
                         </div>
                       </div>
 
-                      <div className="flex justify-center">
-                        {/* Display the selected seat numbers */}
-                        {selectedSeats.map((selectedSeat) => (
-                          <div
-                            key={selectedSeat.id}
-                            className="border-2 p-2 rounded-xl bg-blue-500 mr-2"
-                          >
-                            {`Selected: ${selectedSeat.sit}`}
-                          </div>
-                        ))}
+                      <div className="mx-auto flex justify-center mt-5">
+                        <p
+                          className="btn btn-outline bg-red-300"
+                          onClick={handleDownload}
+                        >
+                          Download Ticket
+                        </p>
                       </div>
-
-                      <div>
-                        {
-                          selectedSeats.length>0 ?<>
-                          <div
-                        onClick={handlePayment}
-                        className="flex justify-center btn btn-outline bg-purple-200 w-32 mx-auto mt-5"
-                      >
-                        <p>Pay now : {ticketPrice}</p>
-                      </div>
-                          </>:<>
-                          <div
-                        
-                        className="flex justify-center btn btn-outline bg-purple-200 w-32 mx-auto mt-5 btn-disabled"
-                      >
-                        <p>Pay now : {ticketPrice}</p>
-                      </div>
-                          </>
-                        }
-                      </div>
-
-                      
-
-                      {/* <p className="btn btn-outline bg-purple-50">
-                        Book Ticket
-                      </p> */}
                     </div>
                   );
                 }
@@ -251,4 +206,4 @@ const SelectSit = () => {
   );
 };
 
-export default SelectSit;
+export default SeeTicket;

@@ -6,6 +6,9 @@ import SelectSit from "../bookings/SelectSit";
 import LoginGoogle from "../authnticate/LoginGoogle";
 import PrivateRouter from "./PrivateRouter";
 import Shedule from "../bookings/Shedule";
+import PaymentSuccess from "../bookings/PaymentSuccess";
+import PaymentFail from "../bookings/PaymentFail";
+import SeeTicket from "../bookings/SeeTicekt";
 
 const router=createBrowserRouter([
       {
@@ -23,6 +26,16 @@ const router=createBrowserRouter([
                        
                   },
                   {
+                        path:'/payment/success/:tranId',
+                        element:<PaymentSuccess></PaymentSuccess>
+                       
+                  },
+                  {
+                        path:'/payment/fail/:tranId',
+                        element:<PaymentFail></PaymentFail>
+                       
+                  },
+                  {
                         path:'/selectsit',
                         element:<SelectSit></SelectSit>
                   },
@@ -33,6 +46,10 @@ const router=createBrowserRouter([
                   {
                         path:'/schedule',
                         element:<Shedule></Shedule>
+                  },
+                  {
+                        path:'/seeticket',
+                        element:<SeeTicket></SeeTicket>
                   },
                   {
                         path:'*',

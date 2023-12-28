@@ -76,6 +76,8 @@ const Bookings = () => {
     localStorage.setItem("date", data.date)
     localStorage.setItem("departureCity",startingLocation)
     localStorage.setItem("arrivalCity", destinationLocation)
+    localStorage.setItem("ticketHolder",data.name)
+    localStorage.setItem("mobile", data.phone)
 
     console.log("total data ", userInfo);
 
